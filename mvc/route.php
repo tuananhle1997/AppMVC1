@@ -7,7 +7,8 @@ use Mvc\Controllers\ErrorController;
 
 class Route{
 
-    public function run(){
+    public function run()
+    {
         /**
          * url : index.php?controller=employee&action=index
          * $controller = new EmployeeController();
@@ -33,22 +34,31 @@ class Route{
          *
          * http://localhost/appmvc1/index.php?controller=employee&action=delete
          */
-        if ($_REQUEST["controller"]== "employee"){
-            $controller = new EmployeeController();
-            if ($_REQUEST["action"] == "index"){
-                $controller->index();
-            }
-            if ($_REQUEST["action"] == "create"){
-                $controller->create();
-            }
 
-            if ($_REQUEST["action"] == "edit"){
-                $controller->edit();
-            }
+        $controller = isset($_REQUEST["controller"]) ? trim($_REQUEST["controller"]) : "employee";
+        $controller = ucfirst($controller); //Employee
+        $controllerName = "Mvc\\Controllers\\" . $controller . "Controller";
 
-            if ($_REQUEST["action"] == "delete"){
-                $controller->delete();
+        echo '<br>$controller : ' . $controller;
+        echo '<br>$controllerName : ' . $controllerName;
+
+        if (class_exists($controllerName)) {
+            $controllerObject = new $controllerName();
+            $action = isset($_REQUEST["action"]) ? trim($_REQUEST["action"]) : 'index';
+            if (method_exists($controllerObject, $action)) {
+                /**
+                 * $controllerObject->index()
+                 * $controllerObject->edit()
+                 * $controllerObject->delete()
+                 */
+                return $controllerObject->$action();
+            } else {
+                $controllerObject = new ErrorController();
+                return $controllerObject->redirect404();
             }
+        } else {
+            $controllerObject = new ErrorController();
+            return $controllerObject->redirect404();
         }
     }
 }
