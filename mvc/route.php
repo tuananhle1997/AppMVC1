@@ -4,6 +4,7 @@ namespace Mvc;
 
 use Mvc\Controllers\EmployeeController;
 use Mvc\Controllers\ErrorController;
+use Mvc\Controllers\ProductController;
 
 class Route{
 
@@ -34,6 +35,20 @@ class Route{
          *
          * http://localhost/appmvc1/index.php?controller=employee&action=delete
          */
+
+
+        /*
+         * Cách thủ công
+         * if ($_REQUEST["controller"] == 'employee') {
+            $controller = new EmployeeController();
+            if ($_REQUEST["action"] == 'index') {
+                $controller->index();
+            }
+            if ($_REQUEST["action"] == 'edit') {
+                    $controller->edit();
+            }
+        }
+        */
 
         $controller = isset($_REQUEST["controller"]) ? trim($_REQUEST["controller"]) : "employee";
         $controller = ucfirst($controller); //Employee
