@@ -1,37 +1,27 @@
 <?php
 namespace MVC\Controllers;
-
-use Mvc\Model\EmployeeModel;
-
+use MVC\Models\EmployeeModel;
 class EmployeeController {
-
-
-    public function index(){
+    public function index() {
         echo "<br>" . __METHOD__;
-
-        $model = EmployeeModel();
+        $model = new EmployeeModel();
         $result = $model->getAll();
-        //include view
         include_once "mvc/view/employee/index.php";
     }
-
-    public function create(){
-        $errors = array();
+    public function create() {
         echo "<br>" . __METHOD__;
-        //include view
-        if (isset($_POST)&& !empty($_POST)){
-            $model = new EmployeeModel;
-
+        $errors = array();
+        if (isset($_POST) && !empty($_POST)) {
+            $model = new EmployeeModel();
             $status = $model->store($_POST);
-            if ($status){
-                header("Localhost:index.php");
+            if ($status) {
+                header("Location: index.php");
                 exit;
             }
             $errors[] = "Lưu thất bại";
         }
         include_once "mvc/view/employee/create.php";
     }
-
     public function edit() {
         $errors = array();
         echo "<br>" . __METHOD__;
@@ -51,8 +41,6 @@ class EmployeeController {
         }
         include_once "mvc/view/employee/edit.php";
     }
-
-
     public function delete() {
         echo "<br>" . __METHOD__;
         $errors = array();
